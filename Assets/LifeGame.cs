@@ -17,12 +17,18 @@ public class LifeGame : MonoBehaviour, IPointerClickHandler
     LCell[,] _cells;
     [SerializeField,Range(0.1f,1f)]
     float interval = 1;
+    float timer = 0;
     [SerializeField]
     Text text = null;
     int Ngeneration = 0;
-    float timer = 0;
     int _count = 0;
     int generationCount = 0;
+    [Tooltip("上下左右を調べるために使用")]
+    const int _one = 1;
+    [Tooltip("ライフゲームの条件の最低値、周りに生きているセルがいるかどうか")]
+    const int _two = 2;
+    [Tooltip("ライフゲームの条件の最大値、周りに生きているセルがいるかどうか")]
+    const int _three = 3;
     bool oneGenerationFlug = false;
     bool regularIntervalsFlug = false;
     bool nGenerationFlug = false;
@@ -74,7 +80,7 @@ public class LifeGame : MonoBehaviour, IPointerClickHandler
                 Change();
                 Reflect();
                 generationCount++;
-                timer = 0;
+                timer -= timer;
             }
         }
         if(nGenerationFlug)
@@ -134,56 +140,56 @@ public class LifeGame : MonoBehaviour, IPointerClickHandler
     {  
         if (c > 0)
         {
-            if (_cells[r, c - 1].Cellstate == Cellstate.Life)//左
+            if (_cells[r, c - _one].Cellstate == Cellstate.Life)//左
             {
                 _count++;
             }
         }
-        if (c < _columns - 1)
+        if (c < _columns - _one)
         {
-            if (_cells[r, c + 1].Cellstate == Cellstate.Life)//右
+            if (_cells[r, c + _one].Cellstate == Cellstate.Life)//右
             {
                 _count++;
             }
         }
-        if (r < _row - 1)
+        if (r < _row - _one)
         {
-            if (_cells[r + 1, c].Cellstate == Cellstate.Life)//下
+            if (_cells[r + _one, c].Cellstate == Cellstate.Life)//下
             {
                 _count++;
             }
         }
         if (r > 0)
         {
-            if (_cells[r - 1, c].Cellstate == Cellstate.Life)//上
+            if (_cells[r - _one, c].Cellstate == Cellstate.Life)//上
             {
                 _count++;
             }
         }
-        if (r < _row - 1 && c > 0)
+        if (r < _row - _one && c > 0)
         {
-            if (_cells[r + 1, c - 1].Cellstate == Cellstate.Life)//左下
+            if (_cells[r + _one, c - _one].Cellstate == Cellstate.Life)//左下
             {
                 _count++;
             }
         }
-        if (r < _row - 1 && c < _columns - 1)
+        if (r < _row - _one && c < _columns - _one)
         {
-            if (_cells[r + 1, c + 1].Cellstate == Cellstate.Life)//右下
+            if (_cells[r + _one, c + _one].Cellstate == Cellstate.Life)//右下
             {
                 _count++;
             }
         }
-        if (r > 0 && c < _columns - 1)
+        if (r > 0 && c < _columns - _one)
         {
-            if (_cells[r - 1, c + 1].Cellstate == Cellstate.Life)//右上
+            if (_cells[r - _one, c + _one].Cellstate == Cellstate.Life)//右上
             {
                 _count++;
             }
         }
         if (r > 0 && c > 0)
         {
-            if (_cells[r - 1, c - 1].Cellstate == Cellstate.Life)//左上
+            if (_cells[r - _one, c - _one].Cellstate == Cellstate.Life)//左上
             {
                 _count++;
             }
@@ -194,7 +200,7 @@ public class LifeGame : MonoBehaviour, IPointerClickHandler
     {
         if (state == Cellstate.Life)//生きていたら
         {
-            if (2 <= count && count <= 3)//周りに生きているセルが2以上３以下いる場合
+            if (_two <= count && count <= _three)//周りに生きているセルが2以上3以下いる場合
             {
                 cellchange[r, c] = false;
             }
@@ -205,7 +211,7 @@ public class LifeGame : MonoBehaviour, IPointerClickHandler
         }
         else//死んでいたら
         {
-            if (count == 3)//周りに生きているセルがちょうど3個いた場合
+            if (count == _three)//周りに生きているセルがちょうど3個いた場合
             {
                 cellchange[r, c] = true;
             }

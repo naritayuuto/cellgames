@@ -34,6 +34,10 @@ public class Minesweeper : MonoBehaviour, IPointerClickHandler
     private int minute = 0;
     private float secondstime = 0;
     private int minutetime = 0;
+    [Tooltip("上下左右を調べるために使用")]
+    const int _one = 1;
+    [Tooltip("秒数の最大値")]
+    const float _sixty = 60f;
 
     // Start is called before the first frame update
     private void Start()
@@ -60,10 +64,10 @@ public class Minesweeper : MonoBehaviour, IPointerClickHandler
     private void Update()
     {
         seconds += Time.deltaTime;
-        if (seconds >= 60f)
+        if (seconds >= _sixty)
         {
             minute++;
-            seconds = seconds - 60;
+            seconds = seconds - _sixty;
         }
         timeText.text = minute.ToString("00") + ":" + Mathf.Floor(seconds).ToString("00");
     }
@@ -100,51 +104,51 @@ public class Minesweeper : MonoBehaviour, IPointerClickHandler
                 }
                 else
                 {
-                    if (r < _rows - 1)//範囲外かどうか
+                    if (r < _rows - _one)//範囲外かどうか
                     {
-                        if (!_cells[r + 1, c])
+                        if (!_cells[r + _one, c])
                         {
                             Debug.Log("何もなし");//下
                         }
-                        else if (_cells[r + 1, c].CellState == CellState.Mine)
+                        else if (_cells[r + _one, c].CellState == CellState.Mine)
                         {
                             _cells[r, c].CellState++;
                         }
                     }
-                    if (r < _rows - 1 && c < _columns - 1)
+                    if (r < _rows - _one && c < _columns - _one)
                     {
-                        if (!_cells[r + 1, c + 1]) Debug.Log("何もなし");//右斜め下
-                        else if (_cells[r + 1, c + 1].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r + _one, c + _one]) Debug.Log("何もなし");//右斜め下
+                        else if (_cells[r + _one, c + _one].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
-                    if (c < _columns - 1)
+                    if (c < _columns - _one)
                     {
-                        if (!_cells[r, c + 1]) Debug.Log("何もなし");//右
-                        else if (_cells[r, c + 1].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r, c + _one]) Debug.Log("何もなし");//右
+                        else if (_cells[r, c + _one].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
-                    if (r > 0 && c < _columns - 1)
+                    if (r > 0 && c < _columns - _one)
                     {
-                        if (!_cells[r - 1, c + 1]) Debug.Log("何もなし");//右斜め上
-                        else if (_cells[r - 1, c + 1].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r - _one, c + _one]) Debug.Log("何もなし");//右斜め上
+                        else if (_cells[r - _one, c + _one].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
                     if (r > 0)
                     {
-                        if (!_cells[r - 1, c]) Debug.Log("何もなし");//上
-                        else if (_cells[r - 1, c].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r - _one, c]) Debug.Log("何もなし");//上
+                        else if (_cells[r - _one, c].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
                     if (r > 0 && c > 0)
                     {
-                        if (!_cells[r - 1, c - 1]) Debug.Log("何もなし");//左斜め上
-                        else if (_cells[r - 1, c - 1].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r - _one, c - _one]) Debug.Log("何もなし");//左斜め上
+                        else if (_cells[r - _one, c - _one].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
                     if (c > 0)
                     {
-                        if (!_cells[r, c - 1]) Debug.Log("何もなし");//左
-                        else if (_cells[r, c - 1].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r, c - _one]) Debug.Log("何もなし");//左
+                        else if (_cells[r, c - _one].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
-                    if (r < _rows - 1 && c > 0)
+                    if (r < _rows - _one && c > 0)
                     {
-                        if (!_cells[r + 1, c - 1]) Debug.Log("何もなし");//左斜め下
-                        else if (_cells[r + 1, c - 1].CellState == CellState.Mine) _cells[r, c].CellState++;
+                        if (!_cells[r + _one, c - _one]) Debug.Log("何もなし");//左斜め下
+                        else if (_cells[r + _one, c - _one].CellState == CellState.Mine) _cells[r, c].CellState++;
                     }
                 }
             }
@@ -152,40 +156,40 @@ public class Minesweeper : MonoBehaviour, IPointerClickHandler
     }
     public void CellOpen(int r, int c)
     {
-        if (r < _rows - 1 && r >= 0)//範囲内かどうか
+        if (r < _rows - _one && r >= 0)//範囲内かどうか
         {
-            if (!_cells[r + 1, c].OpenFlug)//下
+            if (!_cells[r + _one, c].OpenFlug)//下
             {
-                _cells[r + 1, c].Open();
+                _cells[r + _one, c].Open();
             }
         }
-        if (r < _rows - 1 && c < _columns - 1)
+        if (r < _rows - _one && c < _columns - _one)
         {
-            if (!_cells[r + 1, c + 1].OpenFlug) _cells[r + 1, c + 1].Open();//右斜め下
+            if (!_cells[r + _one, c + _one].OpenFlug) _cells[r + _one, c + _one].Open();//右斜め下
         }
-        if (c < _columns - 1 && c >= 0)
+        if (c < _columns - _one && c >= 0)
         {
-            if (!_cells[r, c + 1].OpenFlug) _cells[r, c + 1].Open();//右
+            if (!_cells[r, c + _one].OpenFlug) _cells[r, c + _one].Open();//右
         }
-        if (r > 0 && c < _columns - 1)
+        if (r > 0 && c < _columns - _one)
         {
-            if (!_cells[r - 1, c + 1].OpenFlug) _cells[r - 1, c + 1].Open();//右斜め上
+            if (!_cells[r - _one, c + _one].OpenFlug) _cells[r - _one, c + _one].Open();//右斜め上
         }
         if (r > 0)
         {
-            if (!_cells[r - 1, c].OpenFlug) _cells[r - 1, c].Open();//上
+            if (!_cells[r - _one, c].OpenFlug) _cells[r - _one, c].Open();//上
         }
         if (r > 0 && c > 0)
         {
-            if (!_cells[r - 1, c - 1].OpenFlug) _cells[r - 1, c - 1].Open();//左斜め上
+            if (!_cells[r - _one, c - _one].OpenFlug) _cells[r - _one, c - _one].Open();//左斜め上
         }
         if (c > 0)
         {
-            if (!_cells[r, c - 1].OpenFlug) _cells[r, c - 1].Open();//左
+            if (!_cells[r, c - _one].OpenFlug) _cells[r, c - _one].Open();//左
         }
-        if (r < _rows - 1 && c > 0)
+        if (r < _rows - _one && c > 0)
         {
-            if (!_cells[r + 1, c - 1].OpenFlug) _cells[r + 1, c - 1].Open();//左斜め下
+            if (!_cells[r + _one, c - _one].OpenFlug) _cells[r + _one, c - _one].Open();//左斜め下
         }
     }
     public void OnPointerClick(PointerEventData eventData)
